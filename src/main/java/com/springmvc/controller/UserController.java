@@ -5,10 +5,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.springmvc.service.UserService;
+
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class UserController {
 
-	
+	private final UserService userService;
 	//회원가입폼 페이지
 	@GetMapping("/userRegForm")
 	public String userRegForm() {
@@ -28,6 +33,8 @@ public class UserController {
 		System.out.println("name :" + name);
 		System.out.println("email : " + email);
 		System.out.println("passwrod : " + password);
+		
+		userService.addUser(name, email, password);
 		
 		return "redirect:/welcome";
 	}
