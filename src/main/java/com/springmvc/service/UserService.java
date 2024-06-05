@@ -26,4 +26,10 @@ public class UserService {
         
         return user;
     }
+    
+    //회원정보를 가지고 오는 
+    @Transactional
+    public User getUser(String email) {
+    	return userDao.getUser(email);
+    }
 }

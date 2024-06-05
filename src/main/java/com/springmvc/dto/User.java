@@ -5,10 +5,12 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
 @NoArgsConstructor
+@ToString //()toString으로 자동으로 만들어준다.
 public class User {
 	
 	private int userId;
