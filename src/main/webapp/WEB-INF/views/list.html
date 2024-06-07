@@ -62,7 +62,7 @@
             <span th:if="${loginInfo == null}">글쓰기</span>
         </div>
         <div>
-            <span th:each="n : ${#numbers.sequence(1, pageCount)}"><a th:href="@{/(page=${n})}" th:text="${n}"></a></span>
+            <span th:each="n : ${#numbers.sequence(1, pageCount)}"><a th:href="@{/list(page=${n})}" th:text="${n}"></a></span>
         </div>
     </div>
 </section>
