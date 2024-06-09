@@ -93,4 +93,22 @@ public class BoardController {
 		return "redirect:/list";
 	}
 	
+    @GetMapping("/delete")
+    public String delete(
+            @RequestParam("boardId") int boardId,
+            HttpSession session
+    ) {
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        if (loginInfo == null) { // 세션에 로그인 정보가 없으면 /loginform으로 redirect
+            return "redirect:/loginform";
+        }
+
+        // 이글의 주인과 로그인한 사용자의 id가 같으냐?
+
+        boardService.deleteBoard(loginInfo.getUserId(), boardId);
+
+
+        return "redirect:/"; // 리스트 보기로 리다이렉트한다.
+    }
+	
 }

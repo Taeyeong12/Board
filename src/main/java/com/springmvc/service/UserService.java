@@ -21,6 +21,12 @@ public class UserService {
     @Transactional
     public User addUser(String name, String email, String password) {
         // userDao를 통해 addUser 메서드 호출
+    	
+    	User user1 = userDao.addUser(email, name, password);
+    	if(user1 !=null) {
+    		throw new RuntimeException("이미 가입된 이메일 입니다.");
+    	}
+    	
         User user = userDao.addUser(email, name, password);
         userDao.mappingUserRole(user.getUserId()); //권한을 부여한다.
         

@@ -77,6 +77,12 @@ public class BoardDao {
                 "where board_id = :boardId";
         jdbcTemplate.update(sql, Map.of("boardId", boardId));
     }
+    
+    @Transactional
+	public void deleteBoard(int boardId) {
+		String sql = "delete from board where board_Id = :boardId";
+        jdbcTemplate.update(sql, Map.of("boardId", boardId));
+	}
 
 	
 
