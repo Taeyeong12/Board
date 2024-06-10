@@ -1,6 +1,8 @@
 package com.springmvc.dao;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -74,6 +76,16 @@ public class UserDao {
         }catch(Exception ex){
             return null;
         }
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> getRoles(int userId) {
+        String sql = "select r.name from user_role ur, role r where ur.role_id = r.role_id and ur.user_id = :userId";
+
+        List<String> roles = jdbcTemplate.query(sql, Map.of("userId", userId), (rs, rowNum) -> {
+            return rs.getString(1);
+        });
+        return roles;
     }
 	
 	

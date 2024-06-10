@@ -1,5 +1,7 @@
 package com.springmvc.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,4 +40,9 @@ public class UserService {
     public User getUser(String email) {
     	return userDao.getUser(email);
     }
+    
+    @Transactional(readOnly = true)
+	public List<String> getRoles(int userId) {
+		return userDao.getRoles(userId);
+	}
 }

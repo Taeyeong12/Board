@@ -17,6 +17,7 @@ import com.springmvc.service.BoardService;
 import lombok.RequiredArgsConstructor;
 
 
+
 @Controller
 @RequiredArgsConstructor
 public class BoardController {
@@ -103,12 +104,57 @@ public class BoardController {
             return "redirect:/loginform";
         }
 
-        // 이글의 주인과 로그인한 사용자의 id가 같으냐?
-
-        boardService.deleteBoard(loginInfo.getUserId(), boardId);
-
+        // loginInfo.getUserId() 사용자가 쓴 글일 경우에만 삭제한다.
+        List<String> roles = loginInfo.getRoles();
+        if(roles.contains("ROLE_ADMIN")){
+            boardService.deleteBoard(boardId);
+        }else {
+            boardService.deleteBoard(loginInfo.getUserId(), boardId);
+        }
 
         return "redirect:/"; // 리스트 보기로 리다이렉트한다.
     }
+    
+    @GetMapping("/updateform")
+    public String updateform(@RequestParam("boardId") int boardId,Model model, HttpSession session) {
+    	
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        if (loginInfo == null) { // 세션에 로그인 정보가 없으면 /loginform으로 redirect
+            return "redirect:/loginform";
+        }
+    	//boardId에 해당하는 정보를 읽어와서 updateform 템플릿에 전달
+    	Board board =boardService.getBoard(boardId, false);
+    	model.addAttribute("board", board);
+    	model.addAttribute("loginInfo", loginInfo);
+
+		return "/updateform";
+    	
+    }
+    
+    @PostMapping("/update")
+    public String update(@RequestParam("boardId") int boardId,
+						@RequestParam("title") String title,
+						@RequestParam("content") String content,
+						HttpSession session
+						) {
+    	
+        LoginInfo loginInfo = (LoginInfo) session.getAttribute("loginInfo");
+        if (loginInfo == null) { // 세션에 로그인 정보가 없으면 /loginform으로 redirect
+            return "redirect:/loginform";
+        }
+        
+        
+    	Board board =boardService.getBoard(boardId, false);
+    	
+    	if(board.getUserId() != loginInfo.getUserId() ) {
+            return "redirect:/board?boardId=" + boardId;
+    	}
+    	
+    	boardService.updateBoard(boardId, title, content);
+        
+    	//글쓴이만 수정이 가능
+        return "redirect:/board?boardId="+boardId;
+    }
+    
 	
 }
